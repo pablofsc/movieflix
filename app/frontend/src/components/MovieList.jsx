@@ -51,31 +51,34 @@ const MovieList = ({ movies, ratings, setMovies, setRatings, onMovieSelect }) =>
     <div className="movie-list">
       {movies.map((movie) => (
         <div key={movie.id} className="movie-card" onClick={() => onMovieSelect(movie.id)}>
-          <div className="movie-header">
-            <h3 className="movie-title">{movie.title}</h3>
-            <span className="movie-year">({movie.year})</span>
-          </div>
+          <div className="movie-main-content">
+            <div className="movie-header">
+              <h3 className="movie-title">{movie.title}</h3>
+              <span className="movie-year">({movie.year})</span>
+            </div>
 
-          <div className="movie-details">
-            <p className="movie-genre">
-              <strong>Gênero:</strong> {movie.genre}
-            </p>
-            <p className="movie-director">
-              <strong>Diretor:</strong> {movie.director}
-            </p>
+            <div className="movie-details">
+              <span className="movie-genre">
+                <strong>Gênero:</strong> {movie.genre}
+              </span>
+              <span className="movie-director">
+                <strong>Diretor:</strong> {movie.director}
+              </span>
+            </div>
+
             {movie.description && (
-              <p className="movie-description">
+              <div className="movie-description">
                 <strong>Descrição:</strong> {movie.description}
-              </p>
+              </div>
             )}
           </div>
 
-          <div className="movie-rating">
+          <div className="movie-rating-card">
             <span className="average-rating">
-              Avaliação média: {getAverageRating(movie.id)}
+              {getAverageRating(movie.id)}
             </span>
             <span className="rating-count">
-              ({getMovieRatings(movie.id).length} avaliações)
+              {getMovieRatings(movie.id).length} avaliações
             </span>
           </div>
 
