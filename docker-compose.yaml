@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: movieflix-app
+    networks:
+      - movieflix-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: movieflix-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+    networks:
+      - movieflix-network
+
+networks:
+  movieflix-network:
+    driver: bridge
