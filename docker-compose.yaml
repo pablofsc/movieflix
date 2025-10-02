@@ -1,6 +1,42 @@
-version: "3.8"
-
 services:
+  postgres:
+    image: postgres:15
+    container_name: movieflix-postgres
+    environment:
+      POSTGRES_DB: movieflix
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - movieflix-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d movieflix"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - movieflix-network
+
+  etl:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile
+    container_name: movieflix-etl
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: movieflix
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./data:/etl/data
+    networks:
+      - movieflix-network
+
   app:
     build:
       context: ./app
@@ -25,3 +61,7 @@ services:
 networks:
   movieflix-network:
     driver: bridge
+
+volumes:
+  movieflix-data:
+    driver: local
