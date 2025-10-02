@@ -5,6 +5,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
+    image: pablofsc/movieflix-app:latest
     container_name: movieflix-app
     networks:
       - movieflix-network
