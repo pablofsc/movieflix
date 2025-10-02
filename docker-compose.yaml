@@ -43,6 +43,14 @@ services:
       dockerfile: Dockerfile
     image: pablofsc/movieflix-app:latest
     container_name: movieflix-app
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: movieflix
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    depends_on:
+      etl:
+        condition: service_completed_successfully
     networks:
       - movieflix-network
 
