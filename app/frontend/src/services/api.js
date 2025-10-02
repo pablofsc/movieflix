@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Use proxy em desenvolvimento, URL direta em produção
-const API_BASE_URL = import.meta.env.DEV ? '/api' : 'http://localhost:3000';
+const API_BASE_URL = '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -11,9 +11,15 @@ const api = axios.create({
 });
 
 export const movieService = {
-  // Obter todos os filmes
-  getMovies: async () => {
-    const response = await api.get('/movies');
+  // Obter filmes com filtros opcionais
+  getMovies: async (params = {}) => {
+    const queryString = new URLSearchParams({
+      limit: params.limit || 20,
+      offset: params.offset || 0,
+      ...(params.genre && { genre: params.genre }),
+      ...(params.search && { search: params.search })
+    }).toString();
+    const response = await api.get(`/movies?${queryString}`);
     return response.data;
   },
 
@@ -25,15 +31,36 @@ export const movieService = {
 };
 
 export const ratingService = {
-  // Obter todas as avaliações
-  getRatings: async () => {
-    const response = await api.get('/ratings');
+  // Obter avaliações com filtros opcionais
+  getRatings: async (params = {}) => {
+    const queryString = new URLSearchParams({
+      ...(params.limit && { limit: params.limit }),
+      ...(params.movieId && { movieId: params.movieId }),
+      ...(params.userId && { userId: params.userId })
+    }).toString();
+    const response = await api.get(`/ratings?${queryString}`);
     return response.data;
   },
 
   // Adicionar uma nova avaliação
   addRating: async (rating) => {
     const response = await api.post('/ratings', rating);
+    return response.data;
+  },
+};
+
+export const userService = {
+  // Obter todos os usuários
+  getUsers: async () => {
+    const response = await api.get('/users');
+    return response.data;
+  },
+};
+
+export const statsService = {
+  // Obter estatísticas
+  getStats: async () => {
+    const response = await api.get('/stats');
     return response.data;
   },
 };

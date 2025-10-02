@@ -5,10 +5,8 @@ import '../styles/components/MovieForm.css';
 const MovieForm = ({ onMovieAdded }) => {
   const [formData, setFormData] = useState({
     title: '',
-    year: '',
     genre: '',
-    director: '',
-    description: ''
+    year: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');

@@ -3,13 +3,43 @@ import '../styles/components/MovieDetailModal.css';
 const MovieDetailModal = ({ movie, ratings, onClose }) => {
   if (!movie) return null;
 
-  const movieRatings = ratings.filter(rating => rating.movieId === movie.id);
+  const movieRatings = ratings.filter(rating => rating.movie_id === movie.movie_id);
 
   const getAverageRating = () => {
     if (movieRatings.length === 0) return 'Sem avaliações';
     const sum = movieRatings.reduce((acc, rating) => acc + rating.rating, 0);
     const average = sum / movieRatings.length;
     return `${average.toFixed(1)} ⭐`;
+  };
+
+  const parseGenres = (genreString) => {
+    try {
+      const genresArray = JSON.parse(genreString.replace(/'/g, '"'));
+      return genresArray.map(genre => genre.name);
+    } catch (error) {
+      return [genreString];
+    }
+  };
+
+  const getGenreColor = (genre) => {
+    const colors = {
+      'Action': '#ff6b6b',
+      'Adventure': '#4ecdc4',
+      'Animation': '#45b7d1',
+      'Comedy': '#f9ca24',
+      'Crime': '#6c5ce7',
+      'Drama': '#a29bfe',
+      'Family': '#fd79a8',
+      'Fantasy': '#e84393',
+      'Horror': '#2d3436',
+      'Mystery': '#636e72',
+      'Romance': '#e17055',
+      'Science Fiction': '#00b894',
+      'Thriller': '#74b9ff',
+      'War': '#636e72',
+      'Western': '#d63031'
+    };
+    return colors[genre] || '#74b9ff';
   };
 
   const handleOverlayClick = (e) => {
@@ -38,21 +68,19 @@ const MovieDetailModal = ({ movie, ratings, onClose }) => {
         <div className="movie-detail-content">
           <div className="movie-detail-info">
             <div className="movie-detail-row">
-              <span className="movie-detail-label">Gênero:</span>
-              <span className="movie-detail-value">{movie.genre}</span>
-            </div>
-
-            <div className="movie-detail-row">
-              <span className="movie-detail-label">Diretor:</span>
-              <span className="movie-detail-value">{movie.director}</span>
-            </div>
-
-            {movie.description && (
-              <div className="movie-detail-description">
-                <span className="movie-detail-label">Descrição:</span>
-                <p className="movie-detail-description-text">{movie.description}</p>
+              <span className="movie-detail-label">Gêneros:</span>
+              <div className="movie-detail-genres">
+                {parseGenres(movie.genre).map((genre, index) => (
+                  <span
+                    key={index}
+                    className="genre-tag"
+                    style={{ backgroundColor: getGenreColor(genre) }}
+                  >
+                    {genre}
+                  </span>
+                ))}
               </div>
-            )}
+            </div>
           </div>
 
           <div className="movie-detail-rating-section">
@@ -68,17 +96,11 @@ const MovieDetailModal = ({ movie, ratings, onClose }) => {
               {movieRatings.length === 0 ? (
                 <p className="movie-detail-no-ratings">Nenhuma avaliação ainda.</p>
               ) : (
-                movieRatings.map((rating) => (
-                  <div key={rating.id} className="movie-detail-rating-item">
+                  movieRatings.map((rating, index) => (
+                    <div key={`${rating.user_id}-${rating.movie_id}-${index}`} className="movie-detail-rating-item">
                     <div className="movie-detail-rating-header">
-                      <span className="movie-detail-rating-score">{rating.rating}⭐</span>
-                      <span className="movie-detail-rating-date">
-                        {new Date(rating.createdAt).toLocaleDateString('pt-BR')}
-                      </span>
-                    </div>
-                    {rating.comment && (
-                      <p className="movie-detail-rating-comment">"{rating.comment}"</p>
-                    )}
+                        <span className="movie-detail-rating-score">{rating.rating}⭐</span>
+                      </div>
                   </div>
                 ))
               )}

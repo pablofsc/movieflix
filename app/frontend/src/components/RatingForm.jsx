@@ -42,9 +42,9 @@ const RatingForm = ({ movies, onRatingAdded, selectedMovieId, setSelectedMovieId
 
     try {
       const ratingData = {
-        movieId: parseInt(formData.movieId, 10),
-        rating: parseInt(formData.rating, 10),
-        comment: formData.comment.trim() || undefined
+        movie_id: formData.movieId,
+        user_id: 1, // Por enquanto usuário fixo
+        rating: parseInt(formData.rating, 10)
       };
 
       const newRating = await ratingService.addRating(ratingData);
@@ -68,7 +68,7 @@ const RatingForm = ({ movies, onRatingAdded, selectedMovieId, setSelectedMovieId
   };
 
   const getSelectedMovie = () => {
-    return movies.find(movie => movie.id === parseInt(formData.movieId, 10));
+    return movies.find(movie => movie.movie_id === formData.movieId);
   };
 
   return (
@@ -86,7 +86,7 @@ const RatingForm = ({ movies, onRatingAdded, selectedMovieId, setSelectedMovieId
         >
           <option value="">Selecione um filme</option>
           {movies.map((movie) => (
-            <option key={movie.id} value={movie.id}>
+            <option key={movie.movie_id} value={movie.movie_id}>
               {movie.title} ({movie.year})
             </option>
           ))}
@@ -97,7 +97,7 @@ const RatingForm = ({ movies, onRatingAdded, selectedMovieId, setSelectedMovieId
         <div className="selected-movie-info">
           <h4>Filme selecionado:</h4>
           <p><strong>{getSelectedMovie().title}</strong> ({getSelectedMovie().year})</p>
-          <p>Gênero: {getSelectedMovie().genre} | Diretor: {getSelectedMovie().director}</p>
+          <p>Gênero: {getSelectedMovie().genre}</p>
         </div>
       )}
 
