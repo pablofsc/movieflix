@@ -1,11 +1,11 @@
 # frontend
-FROM node:22-alpine AS frontend-build
+FROM node:22 AS frontend-build
 WORKDIR /usr
 COPY frontend/ .
 RUN npm install && npm run build
 
 # backend
-FROM node:22-alpine
+FROM node:22
 WORKDIR /usr
 COPY backend/ ./backend/
 RUN cd backend && npm install
