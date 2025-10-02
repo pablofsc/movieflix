@@ -33,4 +33,4 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Push da imagem do app
-      run: docker push movieflix-app:latest
+      run: docker push pablofsc/movieflix-app:latest
