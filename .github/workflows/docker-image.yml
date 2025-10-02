@@ -20,3 +20,8 @@ jobs:
     
     - name: Subir containers
       run: docker compose up -d
+
+    - name: Testar aplicação
+      run: |
+        sleep 5
+        curl --fail http://localhost || (docker compose logs app && exit 1)
