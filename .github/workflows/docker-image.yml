@@ -1,0 +1,36 @@
+name: Subir Movieflix
+
+on:
+  push:
+    branches: [ "main" ]
+    
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Build com Docker Compose
+      run: docker compose build
+    
+    - name: Subir containers
+      run: docker compose up -d
+
+    - name: Teste da aplicação
+      run: |
+        sleep 5
+        curl --fail http://localhost || (docker compose logs app && exit 1)
+
+    - name: Login no Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    - name: Push da imagem do app
+      run: docker push movieflix-app:latest
