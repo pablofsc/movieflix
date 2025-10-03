@@ -33,9 +33,18 @@ No terminal (bash):
 docker compose up --build
 ```
 
-O GitHub actions está configurado para buildar e subir a imagem do app para o DockerHub:
+## Interface
 
-https://hub.docker.com/r/pablofsc/movieflix-app
+Usei React para o front e Node para o back. Usei JavaScript no backend por ser uma linguagem que eu domino mais e por não haver requisito de linguagem nessa parte do projeto.
+
+<img width="1920" height="1040" alt="image" src="https://github.com/user-attachments/assets/784cd3a7-4293-4bd0-8f84-29de4876ace5" />
+
+Note que a url não especifica porta, o que indica que a porta 80 está sendo usada. O app é exposto na porta 3000 e o nginx na porta 80, servindo como proxy reverso.
+
+<img width="350" height="400" alt="image" src="https://github.com/user-attachments/assets/a10a20f3-7758-4eff-a1bc-ddd3bd53d9d4" />
+
+<img width="300" height="400" alt="image" src="https://github.com/user-attachments/assets/58ecb32d-0295-492f-becd-f6882167fb2b" />
+
 
 ## Data Mart
 
@@ -90,8 +99,16 @@ SELECT * FROM ratings_by_country ORDER BY num_ratings DESC LIMIT 1;
 
 Aqui podemos usar uma das views. É a Alemanha com 6423 avaliações. (não temos o número de visualizações, só avaliações)
 
+## CI/CD
+
+O GitHub actions está configurado para buildar e subir a imagem do app para o DockerHub:
+
+https://hub.docker.com/r/pablofsc/movieflix-app
+
+<img width="400" height="250" alt="image" src="https://github.com/user-attachments/assets/1da5e450-1faf-44ab-a145-8b427f2f6a8d" />
+
 ## Notas
 
 Escolhi usar docker-compose porque acho mais fácil principalmente porque temos muitos conteiners que rodam em paralelo e precisam subir na ordem certa.
 
-Usei bastante IA para me ajudar a construir o frontend e backend (que não estão exatamente do jeito que eu gostaria mas funcionam). Mas, como solicitado, os dockerfiles e docker-compose foram feitos na mão mesmo. (com algum sofrimento em certos momentos). Nos scripts Python o uso de IA foi mais pontual.
+Usei bastante IA para me ajudar a construir o frontend e backend (que não estão exatamente do jeito que eu gostaria mas funcionam). Mas, como solicitado, os dockerfiles e docker-compose foram feitos na mão mesmo. (com algum sofrimento em certos momentos).
