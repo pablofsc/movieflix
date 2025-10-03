@@ -3,10 +3,11 @@ from sqlalchemy import create_engine, Column, Integer, String, Numeric, ForeignK
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 import os
+import ast
+import re
 
 print("Iniciando ETL...")
 
-# Paths dos arquivos de dados
 USERS_FILE = "data/raw/users_fake.csv"
 MOVIES_FILE = "data/raw/movies_metadata.csv"
 RATINGS_FILE = "data/raw/ratings_small.csv"
@@ -34,7 +35,7 @@ class User(Base):
 
 class Movie(Base):
     __tablename__ = "movies"
-    movie_id = Column(String, primary_key=True)  # Mudança para String para suportar IDs grandes
+    movie_id = Column(String, primary_key=True)
     title = Column(String)
     genre = Column(String)
     year = Column(Integer)
@@ -45,18 +46,11 @@ class Rating(Base):
     movie_id = Column(String, ForeignKey("movies.movie_id"), primary_key=True)  # Mudança para String
     rating = Column(Numeric)
 
-# criar tabelas
 Base.metadata.create_all(engine)
-
-# ----- Check if data already exists -----
-existing_users = session.query(User).count()
-if existing_users > 0:
-    print("Dados já existem. Pulando ETL.")
-    session.close()
-    exit(0)
 
 # ----- ETL -----
 print("Carregando usuários...")
+
 # Users
 df_users = pd.read_csv(USERS_FILE)
 df_users["age"] = pd.to_numeric(df_users["age"], errors="coerce").clip(lower=0)
@@ -84,10 +78,35 @@ except Exception as e:
     print(f"Erro ao carregar usuários: {e}")
 
 print("Carregando filmes...")
+
 # Movies
-df_movies = pd.read_csv(MOVIES_FILE, nrows=10000)  # Limitar para teste
+df_movies = pd.read_csv(MOVIES_FILE, nrows=100000) 
+def _extract_first_genre(val):
+    if pd.isna(val):
+        return "Unknown"
+
+    s = str(val).strip()
+    if not s:
+        return "Unknown"
+
+    try:
+        parsed = ast.literal_eval(s)
+        if isinstance(parsed, (list, tuple)) and len(parsed) > 0:
+            first = parsed[0]
+            if isinstance(first, dict):
+                return first.get('name') or 'Unknown'
+            return str(first)
+    except Exception:
+        pass
+
+    m = re.search(r"['\"]name['\"]\s*:\s*['\"]([^'\"]+)['\"]", s)
+    if m:
+        return m.group(1)
+
+    return s
+
 if "genres" in df_movies.columns:
-    df_movies["genre"] = df_movies["genres"].fillna("Unknown")
+    df_movies["genre"] = df_movies["genres"].apply(_extract_first_genre)
 else:
     df_movies["genre"] = "Unknown"
 
@@ -131,6 +150,7 @@ except Exception as e:
     print(f"Filmes carregados individualmente: {success_count}")
 
 print("Carregando avaliações...")
+
 # Ratings
 df_ratings = pd.read_csv(RATINGS_FILE)
 df_ratings["rating"] = pd.to_numeric(df_ratings["rating"], errors="coerce")
@@ -146,7 +166,6 @@ for _, row in df_ratings.iterrows():
         'rating': float(row.rating)
     })
 
-# Inserir ratings em lote (apenas para filmes que existem)
 print("Verificando filmes existentes...")
 existing_movie_ids = set(row[0] for row in session.query(Movie.movie_id).all())
 valid_ratings = [r for r in rating_data if r['movie_id'] in existing_movie_ids]
@@ -175,14 +194,13 @@ print("ETL concluído")
 
 SQL_FILE = "data_mart.sql"
 
-with engine.begin() as conn:  # begin() já faz commit automático
+with engine.begin() as conn:
     with open(SQL_FILE, "r") as f:
         sql_commands = f.read()
 
-    # Dividir pelos ; e executar individualmente
     for command in sql_commands.split(";"):
         command = command.strip()
-        if command:  # ignora linhas vazias
+        if command:
             conn.execute(text(command))
 
 print("Data Mart criado com sucesso!")
