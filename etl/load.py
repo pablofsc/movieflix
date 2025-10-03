@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine, Column, Integer, String, Numeric, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Numeric, ForeignKey, text
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 import os
@@ -171,6 +171,21 @@ except Exception as e:
     session.commit()
     print(f"Avaliações carregadas individualmente: {success_count}")
 
+print("ETL concluído")
+
+SQL_FILE = "data_mart.sql"
+
+with engine.begin() as conn:  # begin() já faz commit automático
+    with open(SQL_FILE, "r") as f:
+        sql_commands = f.read()
+
+    # Dividir pelos ; e executar individualmente
+    for command in sql_commands.split(";"):
+        command = command.strip()
+        if command:  # ignora linhas vazias
+            conn.execute(text(command))
+
+print("Data Mart criado com sucesso!")
+
 session.commit()
 session.close()
-print("ETL concluído")
