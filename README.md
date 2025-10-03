@@ -33,10 +33,6 @@ No terminal (bash):
 docker compose up --build
 ```
 
-O GitHub actions está configurado para buildar e subir a imagem do app para o DockerHub:
-
-https://hub.docker.com/r/pablofsc/movieflix-app
-
 ## Interface
 
 Usei React para o front e Node para o back. Usei JavaScript no backend por ser uma linguagem que eu domino mais e por não haver requisito de linguagem nessa parte do projeto.
@@ -102,6 +98,14 @@ SELECT * FROM ratings_by_country ORDER BY num_ratings DESC LIMIT 1;
 ```
 
 Aqui podemos usar uma das views. É a Alemanha com 6423 avaliações. (não temos o número de visualizações, só avaliações)
+
+## CI/CD
+
+O GitHub actions está configurado para buildar e subir a imagem do app para o DockerHub:
+
+https://hub.docker.com/r/pablofsc/movieflix-app
+
+<img width="400" height="250" alt="image" src="https://github.com/user-attachments/assets/1da5e450-1faf-44ab-a145-8b427f2f6a8d" />
 
 ## Notas
 
