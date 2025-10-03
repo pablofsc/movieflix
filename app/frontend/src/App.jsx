@@ -192,21 +192,33 @@ function App() {
 
         {stats && (
           <div className="stats-container">
-            <div className="stat-item">
-              <span className="stat-number">{stats.movies}</span>
-              <span className="stat-label">Filmes</span>
+            <div className="stat-item stat-movies">
+              <div className="stat-icon">🎬</div>
+              <div className="stat-content">
+                <span className="stat-number">{stats.movies.toLocaleString()}</span>
+                <span className="stat-label">Filmes</span>
+              </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-number">{stats.users}</span>
-              <span className="stat-label">Usuários</span>
+            <div className="stat-item stat-users">
+              <div className="stat-icon">👥</div>
+              <div className="stat-content">
+                <span className="stat-number">{stats.users.toLocaleString()}</span>
+                <span className="stat-label">Usuários</span>
+              </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-number">{stats.ratings}</span>
-              <span className="stat-label">Avaliações</span>
+            <div className="stat-item stat-ratings">
+              <div className="stat-icon">⭐</div>
+              <div className="stat-content">
+                <span className="stat-number">{stats.ratings.toLocaleString()}</span>
+                <span className="stat-label">Avaliações</span>
+              </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-number">{stats.average_rating}</span>
-              <span className="stat-label">Nota Média</span>
+            <div className="stat-item stat-average">
+              <div className="stat-icon">📊</div>
+              <div className="stat-content">
+                <span className="stat-number">{stats.average_rating}</span>
+                <span className="stat-label">Nota Média</span>
+              </div>
             </div>
           </div>
         )}
