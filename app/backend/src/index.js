@@ -87,6 +87,16 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
+app.get('/api/views', async (req, res) => {
+  try {
+    const views = await db.getViews();
+    res.json(views);
+  } catch (error) {
+    console.error('Erro ao buscar views:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
 // Serve frontend build
 app.use(express.static(path.join(__dirname, '../../frontend/build')));
 app.get('/', (req, res) => {

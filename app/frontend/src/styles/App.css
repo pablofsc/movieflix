@@ -60,6 +60,9 @@
   background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
 }
 
+.action-button.info {
+  background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+}
 .action-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);

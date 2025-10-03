@@ -3,6 +3,7 @@ import MovieList from './components/MovieList';
 import MovieForm from './components/MovieForm';
 import RatingForm from './components/RatingForm';
 import MovieDetailModal from './components/MovieDetailModal';
+import ViewsModal from './components/ViewsModal';
 import { movieService, ratingService, userService, statsService } from './services/api';
 import './styles/App.css';
 
@@ -14,6 +15,7 @@ function App() {
   const [selectedMovieId, setSelectedMovieId] = useState(null);
   const [showMovieModal, setShowMovieModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showViewsModal, setShowViewsModal] = useState(false);
   const [selectedMovieForDetail, setSelectedMovieForDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -270,6 +272,12 @@ function App() {
           >
             ⭐ Avaliar Filme
           </button>
+              <button
+                className="action-button info"
+                onClick={() => setShowViewsModal(true)}
+              >
+                📊 Ver Estatísticas
+              </button>
         </div>
 
         <section className="list-section">
@@ -348,6 +356,12 @@ function App() {
             onClose={closeMovieDetail}
           />
         )}
+
+            {/* Modal de views do banco de dados */}
+            <ViewsModal
+              isOpen={showViewsModal}
+              onClose={() => setShowViewsModal(false)}
+            />
           </main>
       )}
     </div>

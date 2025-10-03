@@ -125,6 +125,19 @@ const getStats = async () => {
   };
 };
 
+// Funções para views
+const getViews = async () => {
+  const topMoviesByGenre = await pool.query('SELECT * FROM top_movies_by_genre LIMIT 20');
+  const avgRatingByAgeGroup = await pool.query('SELECT * FROM avg_rating_by_age_group');
+  const ratingsByCountry = await pool.query('SELECT * FROM ratings_by_country LIMIT 20');
+
+  return {
+    topMoviesByGenre: topMoviesByGenre.rows,
+    avgRatingByAgeGroup: avgRatingByAgeGroup.rows,
+    ratingsByCountry: ratingsByCountry.rows
+  };
+};
+
 // Função para fechar o pool
 const closePool = () => {
   return pool.end();
@@ -137,5 +150,6 @@ module.exports = {
   createRating,
   getUsers,
   getStats,
+  getViews,
   closePool
 };

@@ -65,4 +65,12 @@ export const statsService = {
   },
 };
 
+export const viewsService = {
+  // Obter views do banco de dados
+  getViews: async () => {
+    const response = await api.get('/views');
+    return response.data;
+  },
+};
+
 export default api;
