@@ -54,6 +54,42 @@ As views também estão disponíveis no frontend para efeito de demonstração:
 
 Com as views, que simulam um Data Mart, temos acesso a dados direcionados mais facilmente.
 
+## Consultas Analíticas
+
+### 5 filmes mais populares: 
+
+```sql
+SELECT m.movie_id, m.title, COUNT(r.rating) AS total_ratings, AVG(r.rating) AS average_rating 
+FROM public.movies m 
+JOIN public.ratings r ON m.movie_id = r.movie_id 
+GROUP BY m.movie_id, m.title 
+ORDER BY total_ratings DESC 
+LIMIT 5;
+```
+
+São Exterminador do Futuro 3, The Million Dollar Hotel, Solaris, The 39 Steps e Monsoon Weeding.
+
+### Gênero mais bem avaliado:
+
+```sql
+SELECT m.genre, AVG(r.rating) AS average_rating
+FROM public.movies m
+JOIN public.ratings r ON m.movie_id = r.movie_id
+GROUP BY m.genre
+ORDER BY average_rating DESC
+LIMIT 1;
+```
+
+É o de filmes estrangeiros.
+
+### País que mais assiste filmes:
+
+```sql
+SELECT * FROM ratings_by_country ORDER BY num_ratings DESC LIMIT 1;
+```
+
+Aqui podemos usar uma das views. É a Alemanha com 6423 avaliações. (não temos o número de visualizações, só avaliações)
+
 ## Notas
 
 Escolhi usar docker-compose porque acho mais fácil principalmente porque temos muitos conteiners que rodam em paralelo e precisam subir na ordem certa.
