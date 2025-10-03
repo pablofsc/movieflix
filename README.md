@@ -37,6 +37,23 @@ O GitHub actions está configurado para buildar e subir a imagem do app para o D
 
 https://hub.docker.com/r/pablofsc/movieflix-app
 
+## Data Mart
+
+### View de avaliação média por idade: 
+<img width="301" height="114" alt="image" src="https://github.com/user-attachments/assets/05469ca5-bb32-49da-9b1a-698193a96af5" />
+
+### View de quantidade de avaliações por país:
+<img width="297" height="222" alt="image" src="https://github.com/user-attachments/assets/d0316f4f-b208-4c6f-bba5-05a8b2e5f5d6" />
+
+### View de top filmes por gênero:
+<img width="682" height="231" alt="image" src="https://github.com/user-attachments/assets/ce7d5543-4394-450f-9b81-eb31abcdbcd1" />
+
+As views também estão disponíveis no frontend para efeito de demonstração:
+
+<img width="800" height="400" alt="image" src="https://github.com/user-attachments/assets/f515f2e2-6889-4877-a0b8-615e6793fbfd" />
+
+Com as views, que simulam um Data Mart, temos acesso a dados direcionados mais facilmente.
+
 ## Notas
 
 Escolhi usar docker-compose porque acho mais fácil principalmente porque temos muitos conteiners que rodam em paralelo e precisam subir na ordem certa.
