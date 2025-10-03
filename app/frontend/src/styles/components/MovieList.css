@@ -20,6 +20,7 @@
   border: 1px solid #dee2e6;
   border-radius: 12px;
   padding: 1rem 1.5rem;
+  padding-right: 0;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
