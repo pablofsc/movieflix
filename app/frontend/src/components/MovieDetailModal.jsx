@@ -7,9 +7,12 @@ const MovieDetailModal = ({ movie, ratings, onClose }) => {
 
   const getAverageRating = () => {
     if (movieRatings.length === 0) return 'Sem avaliações';
-    const sum = movieRatings.reduce((acc, rating) => acc + rating.rating, 0);
+    const sum = movieRatings.reduce((acc, rating) => {
+      const ratingValue = parseFloat(rating.rating);
+      return acc + (isNaN(ratingValue) ? 0 : ratingValue);
+    }, 0);
     const average = sum / movieRatings.length;
-    return `${average.toFixed(1)} ⭐`;
+    return isNaN(average) ? 'Sem avaliações' : `${average.toFixed(1)} ⭐`;
   };
 
   const parseGenres = (genreString) => {
@@ -96,13 +99,18 @@ const MovieDetailModal = ({ movie, ratings, onClose }) => {
               {movieRatings.length === 0 ? (
                 <p className="movie-detail-no-ratings">Nenhuma avaliação ainda.</p>
               ) : (
-                  movieRatings.map((rating, index) => (
-                    <div key={`${rating.user_id}-${rating.movie_id}-${index}`} className="movie-detail-rating-item">
-                    <div className="movie-detail-rating-header">
-                        <span className="movie-detail-rating-score">{rating.rating}⭐</span>
+                  movieRatings.map((rating, index) => {
+                    const ratingValue = parseFloat(rating.rating);
+                    return (
+                      <div key={`${rating.user_id}-${rating.movie_id}-${index}`} className="movie-detail-rating-item">
+                        <div className="movie-detail-rating-header">
+                          <span className="movie-detail-rating-score">
+                            {isNaN(ratingValue) ? 'N/A' : `${ratingValue.toFixed(1)}`}⭐
+                          </span>
+                        </div>
                       </div>
-                  </div>
-                ))
+                    );
+                  })
               )}
             </div>
           </div>
